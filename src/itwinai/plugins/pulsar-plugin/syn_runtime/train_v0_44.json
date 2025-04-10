@@ -1,0 +1,33 @@
+{
+    "num_sparks": [
+        7.0,
+        7.0
+    ],
+    "conal_latitudes": [
+        0.01,
+        12.950480511801958
+    ],
+    "spark_rotation_axis_polar_att0": [
+        45,
+        24.61624716613571
+    ],
+    "drift_vel": 0.7165710772461158,
+    "spark_dimension": 0.11292699586055256,
+    "spark_mid_freqs": [
+        0.5,
+        1.0
+    ],
+    "spark_flux_powers": [
+        10.0,
+        10.0
+    ],
+    "direction": [
+        0.7712608359528289,
+        -0.2662179414928438,
+        0.5781736162716667
+    ],
+    "dm_homogeneous": 2.5158376950692607,
+    "scintillation_index_homo": 98.9036200209053,
+    "std_dm": 0.2,
+    "std_scintillation_index": 100
+}

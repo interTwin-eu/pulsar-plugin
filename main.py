@@ -1,126 +1,136 @@
-# --------------------------------------------------------------------------------------
-# Part of the interTwin Project: https://www.intertwin.eu/
-#
-# Created by: Matteo Bunino
-#
-# Credit:
-# - Matteo Bunino <matteo.bunino@cern.ch> - CERN
-# - Jarl Sondre Sæther <jarl.sondre.saether@cern.ch> - CERN
-# --------------------------------------------------------------------------------------
+from os import chdir
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+# import src.pulsar_analysis as pa
 
-"""This is a sample use case script. Feel free to remove it.
+# itwinai integration
+from trainer import PulsarTrainer
+from data import PulsarDataset, DatasetSplitter, PipelineLabelsInterface, PipelinePulsarInterface
 
-Adapted from: https://github.com/pytorch/examples/blob/main/mnist/main.py
-"""
+import sys
+sys.path.append('../pulsarrfi_nn/unet_semantic_segmentation/src')
+from pulsar_analysis.generate_data_pipeline import generate_example_payloads_for_training
 
-import argparse
+import inputs
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torchmetrics
-from torchvision import datasets, transforms
-
-from itwinai.loggers import MLFlowLogger
-from itwinai.torch.config import TrainingConfiguration
-from itwinai.torch.trainer import TorchTrainer
-
-
-# Step 1: setup your neural network architecture
-class Net(nn.Module):
-    def __init__(self):
-        super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, 3, 1)
-        self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        self.dropout1 = nn.Dropout(0.25)
-        self.dropout2 = nn.Dropout(0.5)
-        self.fc1 = nn.Linear(9216, 128)
-        self.fc2 = nn.Linear(128, 10)
-
-    def forward(self, x):
-        x = self.conv1(x)
-        x = F.relu(x)
-        x = self.conv2(x)
-        x = F.relu(x)
-        x = F.max_pool2d(x, 2)
-        x = self.dropout1(x)
-        x = torch.flatten(x, 1)
-        x = self.fc1(x)
-        x = F.relu(x)
-        x = self.dropout2(x)
-        x = self.fc2(x)
-        return x
-
-
-def main():
-    # Step 2 (optional): Parse your arguments from the command line
-    parser = argparse.ArgumentParser(description="PyTorch MNIST Example")
-    parser.add_argument(
-        "--batch-size",
-        type=int,
-        default=64,
-        help="input batch size for training (default: 64)",
-    )
-    parser.add_argument(
-        "--epochs", type=int, default=14, help="number of epochs to train (default: 14)"
-    )
-    parser.add_argument(
-        "--strategy", type=str, default="ddp", help="distributed strategy (default=ddp)"
-    )
-    parser.add_argument(
-        "--lr", type=float, default=1.0, help="learning rate (default: 1.0)"
-    )
-    parser.add_argument("--seed", type=int, default=1, help="random seed (default: 1)")
-    parser.add_argument(
-        "--ckpt-interval",
-        type=int,
-        default=10,
-        help="how many batches to wait before logging training status",
-    )
-    args = parser.parse_args()
-
-    # Step 3: Create your datasets
-    transform = transforms.Compose(
-        [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
-    )
-    train_dataset = datasets.MNIST(
-        "../data", train=True, download=True, transform=transform
-    )
-    validation_dataset = datasets.MNIST("../data", train=False, transform=transform)
-
-    # Step 4: Configure your model and your training configuration
-    model = Net()
-
-    training_config = TrainingConfiguration(
-        batch_size=args.batch_size,
-        optim_lr=args.lr,
-        optimizer="adadelta",
-        loss="cross_entropy",
+if inputs.generate_data:
+    generate_example_payloads_for_training( 
+        tag             = inputs.tag,
+        num_payloads    = inputs.num_payloads,
+        plot_a_exampl   = inputs.plot_a_example,
+        param_folder    = inputs.param_folder,
+        payload_folder  = inputs.payload_folder,
+        num_cpus        = inputs.num_cpus
     )
 
-    # Step 5 (optional): Configure a logger and some metrics
-    logger = MLFlowLogger(experiment_name="mnist-tutorial", log_freq=10)
+### INITIALIZE THE DATASETS ###
 
-    metrics = {
-        "accuracy": torchmetrics.Accuracy(task="multiclass", num_classes=10),
-        "precision": torchmetrics.Precision(task="multiclass", num_classes=10),
-    }
+unet_ds = PulsarDataset(
+    image_tag       = inputs.image_tag,
+    mask_tag        = inputs.mask_tag,
+    image_directory = inputs.image_directory,
+    mask_directory  = inputs.mask_directory,
+    type            = 'unet',
+    engine_settings = inputs.engine_settings_unet
+)
 
-    # Step 6: Create your Trainer
-    trainer = TorchTrainer(
-        config=training_config,
-        model=model,
-        metrics=metrics,
-        logger=logger,
-        strategy=args.strategy,
-        epochs=args.epochs,
-        random_seed=args.seed,
-        checkpoint_every=args.ckpt_interval,
-    )
+fcnn_ds = PulsarDataset(
+    image_tag       = inputs.image_tag,
+    mask_tag        = inputs.mask_tag,
+    image_directory = inputs.image_directory,
+    mask_directory  = inputs.mask_directory,
+    type            = 'filtercnn',
+    engine_settings = inputs.engine_settings_filtercnn
+)
 
-    # Step 7: Launch your training
-    _, _, _, trained_model = trainer.execute(train_dataset, validation_dataset, None)
+cnn1d_ds = PulsarDataset(
+    image_tag       = inputs.image_tag,
+    mask_tag        = inputs.mask_tag,
+    image_directory = inputs.image_directory,
+    mask_directory  = inputs.mask_directory,
+    type            = 'cnn1d',
+    engine_settings = inputs.engine_settings_cnn1d
+)
+
+### INITIALIZE THE SPLITTER ###
+
+splitter = DatasetSplitter(
+    train_proportion        = inputs.train_proportion,
+    validation_proportion   = inputs.validation_proportion,
+    test_proportion         = inputs.test_proportion,
+    rnd_seed                = inputs.rnd_seed,
+    name                    = inputs.spl_name
+)
+
+unet_trainer = PulsarTrainer(
+    model                   = UNet(),
+    epochs                  = 1,
+    store_trained_model_at  = inputs.unet_dir,
+    loss                    = WeightedBCELoss(pos_weight=3,neg_weight=1),
+    name                    = 'UNet Trainer',
+    config                  = inputs.config                               
+)
+
+fcnn_trainer = PulsarTrainer(
+    model                   = FilterCNN(),
+    epochs                  = 1,
+    store_trained_model_at  = inputs.fcnn_dir,
+    loss                    = WeightedBCELoss(pos_weight=1,neg_weight=1),  
+    name                    = 'FilterCNN Trainer',
+    config                  = inputs.config
+)
+
+cnn1d_trainer = PulsarTrainer(
+    model                   = CNN1D(),
+    epochs                  = 1,
+    loss                    = WeightedBCELoss(pos_weight=1,neg_weight=1),
+    store_trained_model_at  = inputs.cnn1d_dir,
+    name                    = 'SignalToLabelTrainer',
+    config                  = inputs.config
+)
+
+unet_trainer.execute(*splitter.execute(unet_ds))
+fcnn_trainer.execute(*splitter.execute(fcnn_ds))
+cnn1d_trainer.execute(*splitter.execute(cnn1d_ds))
+
+unet_trainer.write_model()
+fcnn_trainer.write_model()
+cnn1d_trainer.write_model()
+
+## assemble the full pipeline and test on real data
+
+ppl1f = PipelineImageToFilterDelGraphtoIsPulsar(
+    image_to_mask_network               = UNet(),
+    trained_image_to_mask_network_path  = inputs.unet_dir,
+    mask_filter_network                 = FilterCNN(),
+    trained_mask_filter_network_path    = inputs.fcnn_dir,
+    signal_to_label_network             = CNN1D(),
+    trained_signal_to_label_network     = inputs.cnn1d_dir,
+)
+
+ppl2f = PipelineImageToFilterToCCtoLabels(
+    image_to_mask_network               = UNet(),
+    trained_image_to_mask_network_path  = inputs.unet_dir,
+    mask_filter_network                 = FilterCNN(),
+    trained_mask_filter_network_path    = inputs.fcnn_dir,
+    min_cc_size_threshold               = 5
+)
 
 
-if __name__ == "__main__":
-    main()
+data                = np.load(file=inputs.image_directory_npy,mmap_mode='r')
+data_label          = np.load(file=inputs.label_directory_npy,mmap_mode='r')
+data_subset         = data[inputs.offset+1:inputs.offset+inputs.size_of_set,:,:]
+data_label_subset   = data_label[inputs.offset+1:inputs.offset+inputs.size_of_set]
+
+while(True):
+    ppl1f.test_on_real_data_from_npy_files(image_data_set=data_subset,image_label_set=data_label_subset,plot_details=True,plot_randomly=True,batch_size=2)
+    plt.show()
+    if (input('[y/n] to quit: ')=='y'):
+        break
+    plt.close()
+    ppl2f.test_on_real_data_from_npy_files(image_data_set=data_subset,image_label_set=data_label_subset,plot_randomly=True,batch_size=2)    
+    plt.show()
+    if (input('[y/n] to quit: ')=='y'):
+        break
+    plt.close()
