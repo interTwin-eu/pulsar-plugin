@@ -1,36 +1,37 @@
 [build-system]
-requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+requires = ["setuptools", "wheel"]
 
 [project]
-name = "pulsar-plugin"
-version = "0.1.0"
-description = "Custom itwinai plug-in for radio astronomy pulsar detection use-case"
-requires-python = ">=3.10"
-readme = "README.md"
-license = { file = "LICENSE" }
-authors = [{ name = "Alex Krochak", email = "o.krochak@fz-juelich.de" }]
+authors = [{name = "Alex Krochak", email = "o.krochak@fz-juelich.de"}]
 dependencies = [
-    "itwinai[torch]",
-    "pytest>=8.3.4",
-    #"pulsardt==0.2",
-    "pulsar_analysis @ git+https://github.com/okrochak/pulsarrfi_nn_dummy@main",
-    "pulsardt @ git+https://gitlab.com/ml-ppa/pulsardt@main",
-    "ipywidgets",
-    "tqdm>=4.65",
-    "numpyencoder>=0.3.0",
-    "pyquaternion>=0.9.9",
-    "scikit-image>=0.22.0",
-    "pyqt6>=6.0",
+  "itwinai[torch]",
+  "pytest>=8.3.4",
+  "pulsardt @ git+https://gitlab.com/ml-ppa/pulsardt@main",
+  "pulsar_sa @ git+https://gitlab.com/ml-ppa/pulsarrfi_nn.git@version_0.2.2_develepment#subdirectory=unet_semantic_segmentation",
+  "ipywidgets",
+  "tqdm>=4.65",
+  "numpyencoder>=0.3.0",
+  "pyquaternion>=0.9.9",
+  "scikit-image>=0.22.0",
+  "pyqt6>=6.0",
 ]
+description = "Custom itwinai plug-in for radio astronomy pulsar detection use-case"
+license = {file = "LICENSE"}
+name = "pulsar-plugin"
+readme = "README.md"
+requires-python = ">=3.10"
+version = "0.1.0"
 
-[tool.uv.sources]
-pulsardt = [{ index = "pulsar-dt"}]
+#[[tool.uv.index]]
+#explicit = true
+#name = "pulsar-dt"
+#url = "https://gitlab.com/api/v4/projects/59840702/packages/pypi/simple"
 
-[[tool.uv.index]]
-name = "pulsar-dt"
-url = "https://gitlab.com/api/v4/projects/59840702/packages/pypi/simple"
-explicit = true
+#[[tool.uv.index]]
+#explicit = true
+#name = "pulsar-dt"
+#url = "https://gitlab.com/api/v4/projects/59840702/packages/pypi/simple"
 
 [tool.setuptools.packages.find]
 
@@ -40,7 +41,7 @@ where = ["src"]
 # Make sure to list all the plugin subfolders here,
 # otherwise the plugin may not be installed correctly!
 include = [
-    "itwinai.plugins.pulsar",
+  "itwinai.plugins.pulsar",
 ]
 
 # Ruff configuration: https://docs.astral.sh/ruff/configuration/
@@ -48,12 +49,12 @@ include = [
 line-length = 95
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "W"]
-ignore = ["E203"]
 fixable = ["ALL"]
+ignore = ["E203"]
+select = ["E", "F", "I", "W"]
 
 [tool.ruff.format]
-quote-style = "double"
 indent-style = "space"
-skip-magic-trailing-comma = false
 line-ending = "auto"
+quote-style = "double"
+skip-magic-trailing-comma = false
