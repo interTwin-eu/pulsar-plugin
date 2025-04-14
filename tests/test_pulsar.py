@@ -31,14 +31,11 @@ def torch_env() -> str:
     env_path = Path(os.environ.get("TORCH_ENV", ".venv"))
     return str(env_path.resolve())
 
-# @pytest.mark.functional
 def test_radio_astronomy_syndata(torch_env):
     """
     Test synthetic data generation by running it end-to-end
     via the config-test.yaml configuration file.
     """
-
-    # install_requirements(USECASE_FOLDER, torch_env)
 
     cmd = (
         f"{torch_env}/bin/itwinai exec-pipeline "
@@ -59,8 +56,6 @@ def test_radio_astronomy_unet(torch_env):
     via the config-test.yaml configuration file.
     """
 
-    # install_requirements(USECASE_FOLDER, torch_env)
-
     cmd = (
         f"{torch_env}/bin/itwinai exec-pipeline "
         f"--config-name .config-test "
@@ -78,8 +73,6 @@ def test_radio_astronomy_filtercnn(torch_env):
     via the config-test.yaml configuration file.
     """
 
-    # install_requirements(USECASE_FOLDER, torch_env)
-
     cmd = (
         f"{torch_env}/bin/itwinai exec-pipeline "
         f"--config-name .config-test "
@@ -96,8 +89,6 @@ def test_radio_astronomy_cnn1d(torch_env):
     Test CNN-1D Pulsar-DDT trainer by running it end-to-end
     via the config-test.yaml configuration file.
     """
-
-    # install_requirements(USECASE_FOLDER, torch_env)
 
     cmd = (
         f"{torch_env}/bin/itwinai exec-pipeline "

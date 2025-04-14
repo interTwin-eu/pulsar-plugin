@@ -10,27 +10,28 @@ from typing import Literal, Optional, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-from itwinai.components import DataGetter, DataSplitter, monitor_exec
 from pulsar_analysis.neural_network_models import UNet
 from pulsar_analysis.pipeline_methods import (
-    PipelineImageToFilterDelGraphtoIsPulsar, PipelineImageToFilterToCCtoLabels,
-    PipelineImageToMask)
+    PipelineImageToFilterDelGraphtoIsPulsar,
+    PipelineImageToFilterToCCtoLabels,
+    PipelineImageToMask,
+)
 from pulsar_analysis.preprocessing import BinarizeToMask, PrepareFreqTimeImage
-from pulsar_analysis.train_neural_network_model import (ImageMaskPair,
-                                                        SignalLabelPair)
-from pulsar_simulation.generate_data_pipeline import \
-    generate_example_payloads_for_training
+from pulsar_analysis.train_neural_network_model import ImageMaskPair, SignalLabelPair
+from pulsar_simulation.generate_data_pipeline import generate_example_payloads_for_training
 from torch.utils.data import Dataset, random_split
+
+from itwinai.components import DataGetter, DataSplitter, monitor_exec
 
 
 class SynthesizeData(DataGetter):
-    def __init__(self, 
+    def __init__(self,
         name:           Optional[str]   = None,
-        tag:            str             = "test_v0_", 
-        num_payloads:   int             = 50, 
-        plot:           bool            = False, 
-        num_cpus:       int             = 4, 
-        param_root:     str             = "./syn_runtime/", 
+        tag:            str             = "test_v0_",
+        num_payloads:   int             = 50,
+        plot:           bool            = False,
+        num_cpus:       int             = 4,
+        param_root:     str             = "./syn_runtime/",
         payload_root:   str             = "./syn_payload/"
     ) -> None:
         """Initialize the synthesizeData class.
@@ -55,14 +56,14 @@ class SynthesizeData(DataGetter):
         """Generate synthetic data and save it to disk. 
             Relies on the pulsar_simulation package."""
         generate_example_payloads_for_training(
-            tag            = self.parameters["tag"], 
+            tag            = self.parameters["tag"],
             num_payloads   = self.parameters["num_payloads"],
-            plot_a_example = self.parameters["plot"], 
+            plot_a_example = self.parameters["plot"],
             param_folder   = self.parameters["param_root"],
             payload_folder = self.parameters["payload_root"],
             num_cpus       = self.parameters["num_cpus"],
             reinit_ray     = False
-        ) 
+        )
 
 class PulsarDataset(Dataset):
     """Class to represent common datasets. Variable 'engine_settings' is supposed to 
@@ -123,19 +124,19 @@ class PulsarDataset(Dataset):
         ### Check that the engine settings are appropriate for chosen dataset type ###
         if self._type == "unet":
             assert set(engine_settings) == {'image', 'mask'}, \
-            "Wrong engine settings for UNet dataset. \n" 
+            "Wrong engine settings for UNet dataset. \n"
             "Provide 'image' and 'mask' engine settings."
 
         elif self._type == "filtercnn":
             assert set(engine_settings) == {'image', 'mask', 'mask_maker'}, \
-            "Wrong engine settings for FilterCNN dataset. \n" 
+            "Wrong engine settings for FilterCNN dataset. \n"
             "Provide 'image', 'mask' and 'mask_maker' engine settings."
 
         else:
             assert set(engine_settings) == {'mask'}, \
             "Wrong engine settings for CNN1D dataset. Provide 'mask' engine settings."
-        
-        ### Initialize the engines, one to three dependent on the dataset type ### 
+
+        ### Initialize the engines, one to three dependent on the dataset type ###
         ###        Mask engine settings are needed for all dataset types       ###
 
         # retrieve the binarization function from the engine settings and remove it
@@ -147,7 +148,7 @@ class PulsarDataset(Dataset):
             binarize_engine = bin_eng
         )
 
-        if self._type == "unet" or self._type == "filtercnn": # init image engine 
+        if self._type == "unet" or self._type == "filtercnn": # init image engine
             self._image_engine = PrepareFreqTimeImage(**engine_settings["image"])
 
         if self._type == "filtercnn": # init mask_maker engine
@@ -155,7 +156,7 @@ class PulsarDataset(Dataset):
             model_name = engine_settings["mask_maker"].pop("model")
             if model_name == "UNet":
                 mme_model = UNet()
-            else: 
+            else:
                 raise ValueError("Uknown model type in engine_settings['mask_maker']['model']")
             self._mask_maker_engine = PipelineImageToMask(
                 **engine_settings["mask_maker"],
@@ -174,7 +175,7 @@ class PulsarDataset(Dataset):
                 mask_engine             = self._mask_engine,
             )
 
-        elif self._type == "filtercnn":  
+        elif self._type == "filtercnn":
             pair = ImageMaskPair.load_from_payload_and_make_in_mask(
                 image_payload_address   = img_address,
                 mask_payload_address    = mask_address,
@@ -185,7 +186,7 @@ class PulsarDataset(Dataset):
 
         elif self._type == "cnn1d":
             signal_label_pair = SignalLabelPair.load_from_payload_address(
-                mask_payload_address=mask_address, 
+                mask_payload_address=mask_address,
                 mask_engine=self._mask_engine
             )
 
@@ -202,27 +203,27 @@ class PulsarDataset(Dataset):
             pair = torch.tensor(signal, dtype=torch.float32).unsqueeze(0), label_vector
 
         return pair
-        
+
     def __getitem__(self, index):
-        # have to do this because they return different types of objects, and 
+        # have to do this because they return different types of objects, and
         # I want to avoid modifying other methods as they can be called elsewhere
         if self._type == "cnn1d":
             return self.load_image_pair(index)
-        else: 
+        else:
             img, mask = self.load_image_pair(index)()
             img = img.unsqueeze(0)
             mask = mask.unsqueeze(0)
             return img.float(), mask.float()
-    
+
     def __get_descriptions__(self, index):
         return self.load_image_pair(index).descriptions
-    
+
     def __len__(self):
         return self._len
 
     def plot(self, index):
 
-        ##TODO: make this method HPC-friendy 
+        ##TODO: make this method HPC-friendy
         if self._type == "unet" or self._type == "filtercnn":
 
             image_payload_address = \
@@ -300,7 +301,7 @@ class DatasetSplitter(DataSplitter):
 class PipelinePulsarInterface(PipelineImageToFilterDelGraphtoIsPulsar):
     def execute(self) -> PipelineImageToFilterDelGraphtoIsPulsar:
         return self
-    
+
 class PipelineLabelsInterface(PipelineImageToFilterToCCtoLabels):
     def execute(self) -> PipelineImageToFilterToCCtoLabels:
         return self
@@ -330,7 +331,7 @@ class TestSuite:
                 mask_filter_network,
                 trained_mask_filter_network_path,
                 signal_to_label_network,
-                trained_signal_to_label_network   
+                trained_signal_to_label_network
             )
 
             self.to_cc_to_labels = PipelineImageToFilterToCCtoLabels(
@@ -367,8 +368,8 @@ class TestSuite:
         for i in plt.get_fignums():
             fig = plt.figure(i)
             fig.savefig(f"plots/figure_{i}.png")
-            
-        return print("Test Suite executed")       
+
+        return print("Test Suite executed")
 
 class ModelSaver:
     def execute(self, model, path) -> None:

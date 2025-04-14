@@ -7,11 +7,12 @@ import os
 from typing import Any, Dict, Literal, Optional, Tuple
 
 import torch.nn as nn
+from torch import save
+from torch.utils.data import Dataset
+
 from itwinai.loggers import Logger
 from itwinai.torch.config import TrainingConfiguration
 from itwinai.torch.trainer import TorchTrainer
-from torch import save
-from torch.utils.data import Dataset
 
 
 class PulsarTrainer(TorchTrainer):
@@ -41,24 +42,24 @@ class PulsarTrainer(TorchTrainer):
             name        = name
         )
         # set the custom loss function
-        self.loss = loss 
+        self.loss = loss
         self.store_trained_model_at = store_trained_model_at
         os.makedirs(os.path.dirname(store_trained_model_at), exist_ok=True)
 
 
     #NOTE: this would be a nice way to re-use the original __init__
-    # and insert the custom loss function, but AFAIK this doesn't 
+    # and insert the custom loss function, but AFAIK this doesn't
     # work nicely while running from config.yaml
 
     # def set_attributes(self, loss, store_trained_model_at) -> None:
-    #     self.loss = loss 
+    #     self.loss = loss
     #     self.store_trained_model_at = store_trained_model_at
-    #     os.makedirs(os.path.dirname(store_trained_model_at), exist_ok=True)        
+    #     os.makedirs(os.path.dirname(store_trained_model_at), exist_ok=True)
 
     def create_model_loss_optimizer(self) -> None:
 
-        ### This code is almost a complete copy of this method from ### 
-        ### src/itwinai/torch/trainer.py, with exception of removed ### 
+        ### This code is almost a complete copy of this method from ###
+        ### src/itwinai/torch/trainer.py, with exception of removed ###
         ### loss function definition as it is already set in the    ###
         ### constructor                                             ###
 
@@ -113,7 +114,7 @@ class PulsarTrainer(TorchTrainer):
         validation_dataset:     Dataset | None = None,
         test_dataset:           Dataset | None = None,
     ) -> Tuple[Dataset, Dataset, Dataset, Any]:
-        objs = super().execute( 
+        objs = super().execute(
             train_dataset       = train_dataset,
             validation_dataset  = validation_dataset,
             test_dataset        = test_dataset,
