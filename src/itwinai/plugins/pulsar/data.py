@@ -1,6 +1,6 @@
 # --------------------------------------------------------------------------------------
 # Part of the interTwin Project: https://www.intertwin.eu/
-# Created by: Oleksandr Krochak
+# Created by: Alex Krochak
 # --------------------------------------------------------------------------------------
 import os
 import torch
@@ -15,6 +15,7 @@ from typing import Optional, Tuple, Literal
 from collections import OrderedDict
 from functools import cached_property
 
+from pulsar_simulation.generate_data_pipeline import generate_example_payloads_for_training
 from pulsar_analysis.train_neural_network_model import ImageMaskPair, \
     SignalToLabelDataset, SignalLabelPair
 from pulsar_analysis.preprocessing import PrepareFreqTimeImage, BinarizeToMask

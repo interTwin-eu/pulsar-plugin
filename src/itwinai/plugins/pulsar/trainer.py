@@ -1,6 +1,6 @@
 # --------------------------------------------------------------------------------------
 # Part of the interTwin Project: https://www.intertwin.eu/
-# Created by: Oleksandr Krochak
+# Created by: Alex Krochak
 # --------------------------------------------------------------------------------------
 
 import os

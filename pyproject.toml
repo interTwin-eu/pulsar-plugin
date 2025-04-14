@@ -11,10 +11,9 @@ readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Alex Krochak", email = "o.krochak@fz-juelich.de" }]
 dependencies = [
-    "itwinai[torch]",
+    "itwinai[torch]>=0.3.0",
     "pytest>=8.3.4",
-    #"pulsardt==0.2",
-    "pulsar_analysis @ git+https://github.com/okrochak/pulsarrfi_nn_dummy@main",
+    "pulsarrfi-nn @ git+https://gitlab.com/ml-ppa/pulsarrfi_nn.git@version_0.2#subdirectory=unet_semantic_segmentation",
     "pulsardt @ git+https://gitlab.com/ml-ppa/pulsardt@main",
     "ipywidgets",
     "tqdm>=4.65",
@@ -22,15 +21,8 @@ dependencies = [
     "pyquaternion>=0.9.9",
     "scikit-image>=0.22.0",
     "pyqt6>=6.0",
+    "colorama>=0.4.6",
 ]
-
-[tool.uv.sources]
-pulsardt = [{ index = "pulsar-dt"}]
-
-[[tool.uv.index]]
-name = "pulsar-dt"
-url = "https://gitlab.com/api/v4/projects/59840702/packages/pypi/simple"
-explicit = true
 
 [tool.setuptools.packages.find]
 

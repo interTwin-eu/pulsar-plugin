@@ -2,26 +2,24 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: itwinai-plugin-template
+title: itwinai-pulsar-plugin
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
 type: software
 
 authors:
-  - given-names: Matteo
-    family-names: Bunino
-    email: matteo.bunino@cern.ch
-    affiliation: CERN
-    orcid: 'https://orcid.org/0009-0008-5100-9300'
+  - given-names: Alex
+    family-names: Krochak
+    email: o.krochak@fz-juelich.de
+    affiliation: Forschungszentrum Jülich - JSC
   
-repository-code: 'https://github.com/interTwin-eu/itwinai-plugin-template'
-url: 'https://itwinai.readthedocs.io/'
-abstract: AI on cloud and HPC made simple for science
+repository-code: 'https://github.com/interTwin-eu/pulsar-plugin'
+url: 'https://github.com/interTwin-eu/pulsar-plugin'
+abstract: AI on cloud and HPC made simple for science - application to radio astronomy with pulsar detection.
 keywords:
   - Artificial intelligence
   - Machine learning
-  - Digital twins
-  - Climate research
-  - Physics research
+  - Radio astronomy
+  - Pulsar detection
 license: Apache-2.0

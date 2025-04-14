@@ -1,9 +1,6 @@
 # Authors
+Alex Krochak [o.krochak@fz-juelich.de](o.krochak@fz-juelich.de)
 
-## Maintainers
+# Maintainers
+Tanumoy Saha [tanumoy.saha@htw-berlin.de](tanumoy.saha@htw-berlin.de)
 
-Matteo Bunino [matteo.bunino@cern.ch](mailto:matteo.bunino@cern.ch)
-
-## Contributors
-
-[All contributors](https://github.com/interTwin-eu/itwinai-plugin-template/graphs/contributors)
