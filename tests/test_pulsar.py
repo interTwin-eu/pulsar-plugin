@@ -17,7 +17,6 @@ use-cases/radio-astronomy/.config-test.yaml are updated accordingly !!!
 
 import os
 import subprocess
-import tempfile
 from pathlib import Path
 
 import pytest

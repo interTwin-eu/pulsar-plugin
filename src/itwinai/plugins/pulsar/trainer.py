@@ -4,14 +4,13 @@
 # --------------------------------------------------------------------------------------
 
 import os
-from typing import Any, Dict, Literal, Optional, Tuple
-from torch.utils.data import Dataset, DataLoader
-
 import torch.nn as nn
-from torch import device, cuda, save
-from itwinai.torch.trainer import TorchTrainer, RayTorchTrainer
+from typing import Any, Dict, Literal, Optional, Tuple
+from torch.utils.data import Dataset
+from torch import save
+from itwinai.torch.trainer import TorchTrainer
 from itwinai.torch.config import TrainingConfiguration
-from itwinai.loggers import EpochTimeTracker, Logger
+from itwinai.loggers import Logger
 
 class PulsarTrainer(TorchTrainer):
     """Trainer class for radio-astronomy use-case. 

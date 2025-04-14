@@ -7,17 +7,12 @@ import torch
 import glob
 import numpy as np
 import matplotlib.pyplot as plt
-
-from itwinai.components import DataGetter, DataProcessor, DataSplitter, monitor_exec
-from torch.utils.data import Dataset, TensorDataset, random_split
-
+from itwinai.components import DataGetter, DataSplitter, monitor_exec
+from torch.utils.data import Dataset, random_split
 from typing import Optional, Tuple, Literal
 from collections import OrderedDict
-from functools import cached_property
-
 from pulsar_simulation.generate_data_pipeline import generate_example_payloads_for_training
-from pulsar_analysis.train_neural_network_model import ImageMaskPair, \
-    SignalToLabelDataset, SignalLabelPair
+from pulsar_analysis.train_neural_network_model import ImageMaskPair, SignalLabelPair
 from pulsar_analysis.preprocessing import PrepareFreqTimeImage, BinarizeToMask
 from pulsar_analysis.pipeline_methods import PipelineImageToMask, \
         PipelineImageToFilterDelGraphtoIsPulsar, PipelineImageToFilterToCCtoLabels
@@ -42,7 +37,7 @@ class SynthesizeData(DataGetter):
             num_cpus        (int):  number of CPUs used for parallel processing.
             num_payloads    (int):  number of generated examples.
             plot            (bool): if True, plotting routine is activated \
-                                               (set False when running 'main.py' directly after)
+                                    (set False when running 'main.py' directly after)
         """
         super().__init__(name)
         self.save_parameters(**self.locals2params(locals()), pop_self=False)
@@ -52,7 +47,8 @@ class SynthesizeData(DataGetter):
 
     @monitor_exec
     def execute(self) -> None:
-        """Generate synthetic data and save it to disk. Relies on the pulsar_simulation package."""
+        """Generate synthetic data and save it to disk. 
+            Relies on the pulsar_simulation package."""
         generate_example_payloads_for_training(
             tag            = self.parameters["tag"], 
             num_payloads   = self.parameters["num_payloads"],
@@ -122,7 +118,8 @@ class PulsarDataset(Dataset):
         ### Check that the engine settings are appropriate for chosen dataset type ###
         if self._type == "unet":
             assert set(engine_settings) == {'image', 'mask'}, \
-            "Wrong engine settings for UNet dataset. Provide 'image' and 'mask' engine settings."
+            "Wrong engine settings for UNet dataset. \n" 
+            "Provide 'image' and 'mask' engine settings."
 
         elif self._type == "filtercnn":
             assert set(engine_settings) == {'image', 'mask', 'mask_maker'}, \
@@ -223,8 +220,10 @@ class PulsarDataset(Dataset):
         ##TODO: make this method HPC-friendy 
         if self._type == "unet" or self._type == "filtercnn":
 
-            image_payload_address = self._image_directory + self._image_tag.replace("*", str(index))
-            mask_payload_address  = self._mask_directory  + self._mask_tag.replace("*", str(index))
+            image_payload_address = \
+                self._image_directory + self._image_tag.replace("*", str(index))
+            mask_payload_address  = \
+                self._mask_directory  + self._mask_tag.replace("*", str(index))
 
             image_mask_pair = ImageMaskPair.load_from_payload_and_make_in_mask(
                 image_payload_address   = image_payload_address,
@@ -370,6 +369,7 @@ class ModelSaver:
     def execute(self, model, path) -> None:
         m_dict = model.state_dict()
         # ensure correct saving syntax expected by the loader
-        m_new = OrderedDict([(k.replace("module.",""), v) if k.startswith("module") else (k, v) for k, v in m_dict.items()])
+        m_new = OrderedDict([(k.replace("module.",""), v) if \
+                             k.startswith("module") else (k, v) for k, v in m_dict.items()])
         torch.save(m_new, path)
         print(f"Model saved at {path}")
