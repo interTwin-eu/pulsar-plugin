@@ -4,13 +4,15 @@
 # --------------------------------------------------------------------------------------
 
 import os
-import torch.nn as nn
 from typing import Any, Dict, Literal, Optional, Tuple
-from torch.utils.data import Dataset
-from torch import save
-from itwinai.torch.trainer import TorchTrainer
-from itwinai.torch.config import TrainingConfiguration
+
+import torch.nn as nn
 from itwinai.loggers import Logger
+from itwinai.torch.config import TrainingConfiguration
+from itwinai.torch.trainer import TorchTrainer
+from torch import save
+from torch.utils.data import Dataset
+
 
 class PulsarTrainer(TorchTrainer):
     """Trainer class for radio-astronomy use-case. 
@@ -23,10 +25,10 @@ class PulsarTrainer(TorchTrainer):
         strategy:               Literal["ddp", "deepspeed", "horovod"] | None   = None,
         logger:                 Logger | None                                   = None,
         epochs:                 int                                             = 3,
-        model:                  nn.Module                                       = None,
-        loss:                   nn.Module                                       = None,
-        store_trained_model_at: str                                             = ".models/model.pt",
-        name:                   Optional[str]                                   = None,
+        model:                  nn.Module          = None,
+        loss:                   nn.Module          = None,
+        store_trained_model_at: str                = ".models/model.pt",
+        name:                   Optional[str]      = None,
     ) -> None:
 
         # these parameters are initialized with the TorchTrainer class:

@@ -2,21 +2,26 @@
 # Part of the interTwin Project: https://www.intertwin.eu/
 # Created by: Alex Krochak
 # --------------------------------------------------------------------------------------
-import os
-import torch
 import glob
-import numpy as np
-import matplotlib.pyplot as plt
-from itwinai.components import DataGetter, DataSplitter, monitor_exec
-from torch.utils.data import Dataset, random_split
-from typing import Optional, Tuple, Literal
+import os
 from collections import OrderedDict
-from pulsar_simulation.generate_data_pipeline import generate_example_payloads_for_training
-from pulsar_analysis.train_neural_network_model import ImageMaskPair, SignalLabelPair
-from pulsar_analysis.preprocessing import PrepareFreqTimeImage, BinarizeToMask
-from pulsar_analysis.pipeline_methods import PipelineImageToMask, \
-        PipelineImageToFilterDelGraphtoIsPulsar, PipelineImageToFilterToCCtoLabels
+from typing import Literal, Optional, Tuple
+
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+from itwinai.components import DataGetter, DataSplitter, monitor_exec
 from pulsar_analysis.neural_network_models import UNet
+from pulsar_analysis.pipeline_methods import (
+    PipelineImageToFilterDelGraphtoIsPulsar, PipelineImageToFilterToCCtoLabels,
+    PipelineImageToMask)
+from pulsar_analysis.preprocessing import BinarizeToMask, PrepareFreqTimeImage
+from pulsar_analysis.train_neural_network_model import (ImageMaskPair,
+                                                        SignalLabelPair)
+from pulsar_simulation.generate_data_pipeline import \
+    generate_example_payloads_for_training
+from torch.utils.data import Dataset, random_split
+
 
 class SynthesizeData(DataGetter):
     def __init__(self, 

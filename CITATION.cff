@@ -15,7 +15,7 @@ authors:
     affiliation: Forschungszentrum Jülich - JSC
   
 repository-code: 'https://github.com/interTwin-eu/pulsar-plugin'
-url: 'https://github.com/interTwin-eu/pulsar-plugin'
+# url: 'https://github.com/interTwin-eu/pulsar-plugin'
 abstract: AI on cloud and HPC made simple for science - application to radio astronomy with pulsar detection.
 keywords:
   - Artificial intelligence
