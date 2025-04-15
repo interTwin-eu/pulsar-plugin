@@ -1,7 +1,7 @@
 {
   "markdownlint.config": {
     "MD013": {
-      "line_length": 120,
+      "line_length": 88,
       "code_blocks": false,
       "tables": false
     },
@@ -12,6 +12,9 @@
     }
   },
   "[python]": {
+    "editor.rulers": [
+      95
+    ],
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit"
