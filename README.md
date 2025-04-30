@@ -48,7 +48,7 @@ NOTE: itwinai itself is also installed automatically,
 as it is a plug-in dependency (see `pyproject.toml`)
 6. Done ! Now you can either run itwinai from CLI, i.e.:
 `itwinai exec-pipeline +pipe_key=syndata_pipeline`.
-Alternatively, you can unpack the `exec.tar.gz` outside the plug-in directory and run `exec.py`.
+Alternatively, you can unpack the `exec.zip` outside the plug-in directory and run `exec.py`.
 Make sure you are using the virtual environment installed at the plug-in,
 but operate outside the plug-in directory !.
 
@@ -57,7 +57,11 @@ Running from a configuration file
 -----------------------------------------------------------------------------------------------
 
 You can run the full pipeline sequence by executing the following commands locally.
-itwinai will read these commands from the `config.yaml` file in the root of the repository.
+Please note that it is recommended to run these commands outside the plug-in repository for
+organizational reasons. You just need to make sure that the correct Python virtual environment
+is activated.
+
+itwinai will read these commands from the `config.yaml` file.
 
 1. Generate the synthetic data            - `itwinai exec-pipeline +pipe_key=syndata_pipeline`
 2. Initialize and train a UNet model      - `itwinai exec-pipeline +pipe_key=unet_pipeline`
