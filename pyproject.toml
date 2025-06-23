@@ -13,8 +13,8 @@ authors = [{ name = "Alex Krochak", email = "o.krochak@fz-juelich.de" }]
 dependencies = [
     "itwinai[torch]>=0.3.0",
     "pytest>=8.3.4",
-    "pulsarrfi-nn @ git+https://gitlab.com/ml-ppa/pulsarrfi_nn.git@version_0.2#subdirectory=unet_semantic_segmentation",
-    "pulsardt @ git+https://gitlab.com/ml-ppa/pulsardt@main",
+    "pulsarsa @ git+https://gitlab.com/ml-ppa/pulsarsa@dev_version_1.1",
+    "pulsardt @ git+https://gitlab.com/ml-ppa/pulsardt@dev_version_1.1",
     "ipywidgets",
     "tqdm>=4.65",
     "numpyencoder>=0.3.0",
