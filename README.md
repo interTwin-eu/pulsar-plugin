@@ -36,7 +36,7 @@ Plug-in installation
 
 -----------------------------------------------------------------------------------------------
 
-A straightforward way to install the plug-in is as follows:
+A straightforward way to install the plug-in on local machine is as follows:
 
 1. Clone this repository on your local machine or server.
 2. Create a new Python virtual environment: `python -m venv .venv`.
@@ -51,6 +51,36 @@ as it is a plug-in dependency (see `pyproject.toml`)
 Alternatively, you can unpack the `exec.zip` outside the plug-in directory and run `exec.py`.
 Make sure you are using the virtual environment installed at the plug-in,
 but operate outside the plug-in directory !.
+
+
+Plug-in installation on Juwels-Booster
+
+-----------------------------------------------------------------------------------------------
+
+When installing on Juwels-Booster at FZJ, additional steps need to be taken.
+
+1. Load the necessary modules for Python 3.11.3 (recommended):
+   `module --force purge`
+   `ml Stages/2024  GCCcore/.12.3.0 Python/3.11.3`
+   Verify the Python version by `python --version`.
+2. Clone this repository in your personal project folder.
+3. Create a new Python virtual environment: `python -m venv .venv`.
+4. Activate this virtual environment `source .venv/bin/activate`.
+   Verify correct Python and Pip path with:
+   `which pip` and `which python`.
+5. (Recommmended) Install `uv` for accelerated package management:
+   `pip install uv --no-cache-dir`.
+   The argument `--no-cache-dir` is necessary whenever installing with pip to prevent
+   the `~/.cache` folder to fill up your home quota. 
+   More information on UV can be found [here](https://docs.astral.sh/uv/).
+6. Then run from the top directory: `(uv) pip install . --no-cache-dir`.
+   This will install the plug-in.
+   NOTE: itwinai itself is also installed automatically,
+   as it is a plug-in dependency (see `pyproject.toml`)
+7. Extract `exec.tar.gz` with `tar -xvzf exec.tar.gz` outside the plug-in folder.
+   Navigate to the exec folder and test the plug-in execution:
+   `itwinai exec-pipeline +pipe_key=syndata_pipeline`.
+
 
 Running from a configuration file
 
