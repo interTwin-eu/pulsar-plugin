@@ -99,7 +99,10 @@ itwinai will read these commands from the `config.yaml` file.
 4. Initialize and train a CNN1D model     - `itwinai exec-pipeline +pipe_key=cnn1d_pipeline`
 5. Compile a full pipeline and test it    - `itwinai exec-pipeline +pipe_key=evaluate_pipeline`
 
-When running on HPC, you can use the `batch.sh` SLURM script to run these commands.
+When running on HPC, you can use the `batch-jsc.sh` SLURM script to run these commands.
+Please make sure you select an appropriate strategy in `config.yaml` when running on HPC.
+The recommended strategy is `ddp`.
+
 
 Logging with MLflow
 
