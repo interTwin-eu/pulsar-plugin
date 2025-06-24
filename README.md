@@ -66,21 +66,25 @@ When installing on Juwels-Booster at FZJ, additional steps need to be taken.
 3. Clone this repository in your personal project folder.
 4. Create a new Python virtual environment: `python -m venv .venv`.
 5. Activate this virtual environment `source .venv/bin/activate`.
-6. Verify correct Python and Pip path with:
-7. `which pip` and `which python`.
-8. (Recommmended) Install `uv` for accelerated package management:
+   Verify correct Python and Pip path with:
+   `which pip` and `which python`.
+6. (Recommmended) Install `uv` for accelerated package management:
    `pip install uv --no-cache-dir`.
    The argument `--no-cache-dir` is necessary whenever installing with pip to prevent
    the `~/.cache` folder to fill up your home quota.
    More information on UV can be found [here](https://docs.astral.sh/uv/).
-10. Then run from the top directory: `(uv) pip install . --no-cache-dir`.
+7. Then run from the top directory: `(uv) pip install . --no-cache-dir`.
     This will install the plug-in.
     NOTE: itwinai itself is also installed automatically,
     as it is a plug-in dependency (see `pyproject.toml`)
-12. Extract `exec.tar.gz` with `tar -xvzf exec.tar.gz` outside the plug-in folder.
+8. Extract `exec.tar.gz` with `tar -xvzf exec.tar.gz` outside the plug-in folder.
     Navigate to the exec folder and test the plug-in execution:
     `itwinai exec-pipeline +pipe_key=syndata_pipeline`.
 
+When running from `exec` folder, inspect the `config.yaml` and `batch-jsc.sh` files 
+and provide necessary updates. Set the correct path to your virtual environment `.venv`
+within the `batch-jsc.sh` script and also make sure to choose the proper distributed strategy
+in `config.yaml` (`ddp` is recommended). 
 
 Running from a configuration file
 
