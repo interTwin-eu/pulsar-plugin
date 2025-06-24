@@ -63,23 +63,23 @@ When installing on Juwels-Booster at FZJ, additional steps need to be taken.
    `module --force purge`
    `ml Stages/2024  GCCcore/.12.3.0 Python/3.11.3`
    Verify the Python version by `python --version`.
-2. Clone this repository in your personal project folder.
-3. Create a new Python virtual environment: `python -m venv .venv`.
-4. Activate this virtual environment `source .venv/bin/activate`.
-   Verify correct Python and Pip path with:
-   `which pip` and `which python`.
-5. (Recommmended) Install `uv` for accelerated package management:
+3. Clone this repository in your personal project folder.
+4. Create a new Python virtual environment: `python -m venv .venv`.
+5. Activate this virtual environment `source .venv/bin/activate`.
+6. Verify correct Python and Pip path with:
+7. `which pip` and `which python`.
+8. (Recommmended) Install `uv` for accelerated package management:
    `pip install uv --no-cache-dir`.
    The argument `--no-cache-dir` is necessary whenever installing with pip to prevent
-   the `~/.cache` folder to fill up your home quota. 
+   the `~/.cache` folder to fill up your home quota.
    More information on UV can be found [here](https://docs.astral.sh/uv/).
-6. Then run from the top directory: `(uv) pip install . --no-cache-dir`.
-   This will install the plug-in.
-   NOTE: itwinai itself is also installed automatically,
-   as it is a plug-in dependency (see `pyproject.toml`)
-7. Extract `exec.tar.gz` with `tar -xvzf exec.tar.gz` outside the plug-in folder.
-   Navigate to the exec folder and test the plug-in execution:
-   `itwinai exec-pipeline +pipe_key=syndata_pipeline`.
+10. Then run from the top directory: `(uv) pip install . --no-cache-dir`.
+    This will install the plug-in.
+    NOTE: itwinai itself is also installed automatically,
+    as it is a plug-in dependency (see `pyproject.toml`)
+12. Extract `exec.tar.gz` with `tar -xvzf exec.tar.gz` outside the plug-in folder.
+    Navigate to the exec folder and test the plug-in execution:
+    `itwinai exec-pipeline +pipe_key=syndata_pipeline`.
 
 
 Running from a configuration file
