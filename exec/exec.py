@@ -7,10 +7,10 @@ import matplotlib
 from itwinai.plugins.pulsar.data import PulsarDataset, DatasetSplitter, PipelineLabelsInterface, PipelinePulsarInterface
 from itwinai.plugins.pulsar.trainer import PulsarTrainer
 
-from pulsar_analysis.pipeline_methods import PipelineImageToFilterDelGraphtoIsPulsar, PipelineImageToFilterToCCtoLabels
-from pulsar_analysis.neural_network_models import UNet, FilterCNN, CNN1D
-from pulsar_analysis.neural_network_models import WeightedBCELoss
-from pulsar_simulation.generate_data_pipeline import generate_example_payloads_for_training
+from pulsarsa.pipeline_methods import PipelineImageToFilterDelGraphtoIsPulsar, PipelineImageToFilterToCCtoLabels
+from pulsarsa.neural_network_models import UNet, FilterCNN, CNN1D
+from pulsarsa.neural_network_models import WeightedBCELoss
+from pulsardt.generate_data_pipeline import generate_example_payloads_for_training
 
 import inputs
 
