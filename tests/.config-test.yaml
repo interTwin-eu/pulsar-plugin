@@ -120,9 +120,9 @@ unet_pipeline:
       _target_: itwinai.plugins.pulsar.trainer.PulsarTrainer
       strategy: ${strategy}
       model:
-       _target_: pulsar_analysis.neural_network_models.UNet
+       _target_: pulsarsa.neural_network_models.UNet
       loss:
-        _target_: pulsar_analysis.neural_network_models.WeightedBCELoss
+        _target_: pulsarsa.neural_network_models.WeightedBCELoss
         pos_weight: 3
         neg_weight: 1
       epochs: 1
@@ -175,9 +175,9 @@ fcnn_pipeline:
       _target_: itwinai.plugins.pulsar.trainer.PulsarTrainer
       strategy: ${strategy}
       model:
-       _target_: pulsar_analysis.neural_network_models.FilterCNN
+       _target_: pulsarsa.neural_network_models.FilterCNN
       loss:
-        _target_: pulsar_analysis.neural_network_models.WeightedBCELoss
+        _target_: pulsarsa.neural_network_models.WeightedBCELoss
         pos_weight: 1
         neg_weight: 1
       epochs: 1
@@ -228,9 +228,9 @@ cnn1d_pipeline:
       _target_: itwinai.plugins.pulsar.trainer.PulsarTrainer
       strategy: ${strategy}
       model:
-       _target_: pulsar_analysis.neural_network_models.CNN1D
+       _target_: pulsarsa.neural_network_models.CNN1D
       loss:
-        _target_: pulsar_analysis.neural_network_models.WeightedBCELoss
+        _target_: pulsarsa.neural_network_models.WeightedBCELoss
         pos_weight: 1
         neg_weight: 1
       epochs: 1 
@@ -264,13 +264,13 @@ evaluate_pipeline:
     eval_step: 
       _target_: itwinai.plugins.pulsar.data.TestSuite
       image_to_mask_network: 
-        _target_: pulsar_analysis.neural_network_models.UNet
+        _target_: pulsarsa.neural_network_models.UNet
       trained_image_to_mask_network_path: ${unet_st}
       mask_filter_network: 
-        _target_: pulsar_analysis.neural_network_models.FilterCNN
+        _target_: pulsarsa.neural_network_models.FilterCNN
       trained_mask_filter_network_path: ${fcnn_st}
       signal_to_label_network: 
-        _target_: pulsar_analysis.neural_network_models.CNN1D
+        _target_: pulsarsa.neural_network_models.CNN1D
       trained_signal_to_label_network: ${cnn1d_st}
       img_dir: ${real_img_st}
       lbl_dir: ${real_lbl_st}
