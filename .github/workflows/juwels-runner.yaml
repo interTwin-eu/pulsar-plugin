@@ -16,5 +16,6 @@ jobs:
         run: |
           echo "Running on HPC node"
           hostname
+          source /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/.venv/bin/activate 
           cd /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/
           pytest .
