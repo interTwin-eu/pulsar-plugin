@@ -16,6 +16,7 @@ jobs:
         run: |
           echo "Running on HPC node"
           hostname
+          ml Stages/2024 Python/3.11.3
           source /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/.venv/bin/activate 
           cd /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/
           pytest .
