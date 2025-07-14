@@ -16,38 +16,37 @@ from itwinai.torch.trainer import TorchTrainer
 
 
 class PulsarTrainer(TorchTrainer):
-    """Trainer class for radio-astronomy use-case. 
-       Inherited from itwinai TorchTrainer class.
+    """Trainer class for radio-astronomy use-case.
+    Inherited from itwinai TorchTrainer class.
     """
 
     def __init__(
         self,
-        config:                 Dict | TrainingConfiguration | None             = None,
-        strategy:               Literal["ddp", "deepspeed", "horovod"] | None   = None,
-        logger:                 Logger | None                                   = None,
-        epochs:                 int                                             = 3,
-        model:                  nn.Module          = None,
-        loss:                   nn.Module          = None,
-        store_trained_model_at: str                = ".models/model.pt",
-        name:                   Optional[str]      = None,
+        config: Dict | TrainingConfiguration | None = None,
+        strategy: Literal["ddp", "deepspeed", "horovod"] | None = None,
+        logger: Logger | None = None,
+        epochs: int = 3,
+        model: nn.Module = None,
+        loss: nn.Module = None,
+        store_trained_model_at: str = ".models/model.pt",
+        name: Optional[str] = None,
     ) -> None:
 
         # these parameters are initialized with the TorchTrainer class:
         super().__init__(
-            config      = config,
-            strategy    = strategy,
-            logger      = logger,
-            epochs      = epochs,
-            model       = model,
-            name        = name
+            config=config,
+            strategy=strategy,
+            logger=logger,
+            epochs=epochs,
+            model=model,
+            name=name,
         )
         # set the custom loss function
         self.loss = loss
         self.store_trained_model_at = store_trained_model_at
         os.makedirs(os.path.dirname(store_trained_model_at), exist_ok=True)
 
-
-    #NOTE: this would be a nice way to re-use the original __init__
+    # NOTE: this would be a nice way to re-use the original __init__
     # and insert the custom loss function, but AFAIK this doesn't
     # work nicely while running from config.yaml
 
@@ -101,23 +100,23 @@ class PulsarTrainer(TorchTrainer):
         (self.model, self.optimizer, self.lr_scheduler) = self.strategy.distributed(
             self.model, self.optimizer, self.lr_scheduler, **distribute_kwargs
         )
+
     def write_model(self) -> None:
         """Write the model to disk."""
         save(self.model.state_dict(), self.store_trained_model_at)
-
 
     # Hacky way to get around the fact that the execute method
     # does not return self.model anymore
     def execute(
         self,
-        train_dataset:          Dataset,
-        validation_dataset:     Dataset | None = None,
-        test_dataset:           Dataset | None = None,
+        train_dataset: Dataset,
+        validation_dataset: Dataset | None = None,
+        test_dataset: Dataset | None = None,
     ) -> Tuple[Dataset, Dataset, Dataset, Any]:
         objs = super().execute(
-            train_dataset       = train_dataset,
-            validation_dataset  = validation_dataset,
-            test_dataset        = test_dataset,
+            train_dataset=train_dataset,
+            validation_dataset=validation_dataset,
+            test_dataset=test_dataset,
         )
         # return the datasets and the model
         return *(objs[:-1]), self.model

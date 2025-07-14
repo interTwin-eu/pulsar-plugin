@@ -11,8 +11,8 @@ do not break use cases' workflows.
 This is meant to be run from the main itwinai directory, not the use-case folder !!!
 "pytest use-cases/radio-astronomy/tests/test_radio-astronomy.py"
 
-NOTE FOR DEVELOPERS: if you are editing this file, make sure that entries in 
-use-cases/radio-astronomy/.config-test.yaml are updated accordingly !!! 
+NOTE FOR DEVELOPERS: if you are editing this file, make sure that entries in
+use-cases/radio-astronomy/.config-test.yaml are updated accordingly !!!
 """
 
 import os
@@ -23,6 +23,7 @@ import pytest
 
 USECASE_FOLDER = Path("tests").resolve()
 
+
 @pytest.fixture
 def torch_env() -> str:
     """
@@ -30,6 +31,7 @@ def torch_env() -> str:
     """
     env_path = Path(os.environ.get("TORCH_ENV", ".venv"))
     return str(env_path.resolve())
+
 
 def test_radio_astronomy_syndata(torch_env):
     """
@@ -50,6 +52,7 @@ def test_radio_astronomy_syndata(torch_env):
     ## Clean up the use-case folder
     subprocess.run("rm -rf syndata_test", shell=True, check=True, cwd=USECASE_FOLDER)
 
+
 def test_radio_astronomy_unet(torch_env):
     """
     Test U-Net Pulsar-DDT trainer by running it end-to-end
@@ -66,6 +69,7 @@ def test_radio_astronomy_unet(torch_env):
     subprocess.run(cmd.split(), check=True, cwd=USECASE_FOLDER)
     ## Clean up the use-case folder
     subprocess.run("./.pytest-clean", shell=True, check=True, cwd=USECASE_FOLDER)
+
 
 def test_radio_astronomy_filtercnn(torch_env):
     """
@@ -84,6 +88,7 @@ def test_radio_astronomy_filtercnn(torch_env):
     ## Clean up the use-case folder
     subprocess.run("./.pytest-clean", shell=True, check=True, cwd=USECASE_FOLDER)
 
+
 def test_radio_astronomy_cnn1d(torch_env):
     """
     Test CNN-1D Pulsar-DDT trainer by running it end-to-end
@@ -101,6 +106,7 @@ def test_radio_astronomy_cnn1d(torch_env):
     ## Clean up the use-case folder
     subprocess.run("./.pytest-clean", shell=True, check=True, cwd=USECASE_FOLDER)
     subprocess.run("rm -rf ./models/*", shell=True, check=True, cwd=USECASE_FOLDER)
+
 
 # def test_radio_astronomy_evaluate(torch_env):
 #     """
