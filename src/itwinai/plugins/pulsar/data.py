@@ -4,14 +4,15 @@
 # --------------------------------------------------------------------------------------
 import glob
 import os
-import ray
-
 from collections import OrderedDict
 from typing import Literal, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
+import ray
 import torch
+from itwinai.components import DataGetter, DataSplitter, monitor_exec
+from pulsardt import generate_example_payloads_for_training
 from pulsarsa.neural_network_models import UNet
 from pulsarsa.pipeline_methods import (
     PipelineImageToFilterDelGraphtoIsPulsar,
@@ -20,10 +21,7 @@ from pulsarsa.pipeline_methods import (
 )
 from pulsarsa.preprocessing import BinarizeToMask, PrepareFreqTimeImage
 from pulsarsa.train_neural_network_model import ImageMaskPair, SignalLabelPair
-from pulsardt import generate_example_payloads_for_training
 from torch.utils.data import Dataset, random_split
-
-from itwinai.components import DataGetter, DataSplitter, monitor_exec
 
 
 class SynthesizeData(DataGetter):
@@ -58,7 +56,7 @@ class SynthesizeData(DataGetter):
     def execute(self) -> None:
         """Generate synthetic data and save it to disk.
         Relies on the pulsardt package."""
-        if ray.is_initialized() == False:
+        if not ray.is_initialized():
             ray.init(num_cpus=self.parameters["num_cpus"], include_dashboard=False)
 
         generate_example_payloads_for_training(
