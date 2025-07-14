@@ -4,7 +4,7 @@
 # --------------------------------------------------------------------------------------
 import glob
 import os
-import ray
+import ray 
 
 from collections import OrderedDict
 from typing import Literal, Optional, Tuple
@@ -12,18 +12,19 @@ from typing import Literal, Optional, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-from pulsar_analysis.neural_network_models import UNet
-from pulsar_analysis.pipeline_methods import (
+from pulsarsa.neural_network_models import UNet
+from pulsarsa.pipeline_methods import (
     PipelineImageToFilterDelGraphtoIsPulsar,
     PipelineImageToFilterToCCtoLabels,
     PipelineImageToMask,
 )
-from pulsar_analysis.preprocessing import BinarizeToMask, PrepareFreqTimeImage
-from pulsar_analysis.train_neural_network_model import ImageMaskPair, SignalLabelPair
-from pulsar_simulation.generate_data_pipeline import generate_example_payloads_for_training
+from pulsarsa.preprocessing import BinarizeToMask, PrepareFreqTimeImage
+from pulsarsa.train_neural_network_model import ImageMaskPair, SignalLabelPair
+from pulsardt import generate_example_payloads_for_training
 from torch.utils.data import Dataset, random_split
 
 from itwinai.components import DataGetter, DataSplitter, monitor_exec
+
 
 class SynthesizeData(DataGetter):
     def __init__(self,
@@ -53,9 +54,10 @@ class SynthesizeData(DataGetter):
         os.makedirs(payload_root, exist_ok=True)
 
     @monitor_exec
+
     def execute(self) -> None:
         """Generate synthetic data and save it to disk. 
-            Relies on the pulsar_simulation package."""
+            Relies on the pulsardt package."""
         if ray.is_initialized() == False: 
             ray.init(num_cpus=self.parameters["num_cpus"], include_dashboard=False)
 
@@ -68,8 +70,8 @@ class SynthesizeData(DataGetter):
             num_cpus       = self.parameters["num_cpus"],
             reinit_ray     = False
         )
-
         if ray.is_initialized(): ray.shutdown()  # shutdown ray after the data generation is done
+
 
 class PulsarDataset(Dataset):
     """Class to represent common datasets. Variable 'engine_settings' is supposed to 
@@ -95,11 +97,11 @@ class PulsarDataset(Dataset):
     of these are dependent on network type, thus initialization is inherently dependent on
     the provided "type" argument ! To clarify:
     - UNet: image and mask engines are initialized 
-        see: ImageToMaskDataset in src.pulsar_analysis.train_neural_network_model.py:150
+        see: ImageToMaskDataset in pulsarsa.train_neural_network_model.py:150
     - FilterCNN: image, mask and mask_maker engines are initialized
-        see: InMaskToMaskDataset in src.pulsar_analysis.train_neural_network_model.py:238
+        see: InMaskToMaskDataset in pulsarsa.train_neural_network_model.py:238
     - CNN1D: only mask engine is initialized.
-        see: SignalToLabelDataset in src.pulsar_analysis.train_neural_network_model.py:496
+        see: SignalToLabelDataset in pulsarsa.train_neural_network_model.py:496
     """
 
     def __init__(
