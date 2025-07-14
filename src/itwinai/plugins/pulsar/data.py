@@ -14,9 +14,11 @@ import torch
 from itwinai.components import DataGetter, DataSplitter, monitor_exec
 from pulsardt import generate_example_payloads_for_training
 from pulsarsa.neural_network_models import UNet
-from pulsarsa.pipeline_methods import (PipelineImageToFilterDelGraphtoIsPulsar,
-                                       PipelineImageToFilterToCCtoLabels,
-                                       PipelineImageToMask)
+from pulsarsa.pipeline_methods import (
+    PipelineImageToFilterDelGraphtoIsPulsar,
+    PipelineImageToFilterToCCtoLabels,
+    PipelineImageToMask,
+)
 from pulsarsa.preprocessing import BinarizeToMask, PrepareFreqTimeImage
 from pulsarsa.train_neural_network_model import ImageMaskPair, SignalLabelPair
 from torch.utils.data import Dataset, random_split
