@@ -29,7 +29,7 @@ def torch_env() -> str:
     """
     Returns absolute path to torch virtual environment.
     """
-    env_path = Path(os.environ.get("TORCH_ENV", ".venv"))
+    env_path = Path(os.environ.get("TORCH_ENV", ".venv-juwels"))
     return str(env_path.resolve())
 
 
