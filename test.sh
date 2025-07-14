@@ -4,18 +4,24 @@
 #SBATCH --job-name=itwinai-radio-astronomy
 #SBATCH --account=slfse
 #SBATCH --partition=devel
-#SBATCH --output=output.out
-#SBATCH --error=error.out
+#SBATCH --output=output.%.out
+#SBATCH --error=error.%.out
 #SBATCH --time=00:10:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=48
 #SBATCH --exclusive
 
+# ml --force purge
+# ml Stages/2024  GCCcore/.12.3.0 Python/3.11.3
+
 ml --force purge
-ml Stages/2024  GCCcore/.12.3.0 Python/3.11.3
+ml Stages/2024 GCC OpenMPI CUDA/12 cuDNN MPI-settings/CUDA
+ml Python CMake HDF5 PnetCDF libaio mpi4py
 
 source /p/project1/intertwin/krochak1/pulsar-plugin/.venv-juwels/bin/activate
 
 cd /p/project1/intertwin/krochak1/pulsar-plugin
-pytest -s tests 
+
+HYDRA_FULL_ERROR=1 itwinai exec-pipeline +pipe_key=syndata_pipeline
+# pytest -s tests 
