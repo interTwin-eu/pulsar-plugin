@@ -1,0 +1,21 @@
+name: Test Juwels Runner
+
+on:
+  push:
+    branches:
+      - 'gh-worker'
+
+jobs:
+  run-command:
+    runs-on: [self-hosted, linux]  # adjust labels if you used custom ones
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run your HPC command
+        run: |
+          echo "Running on HPC node"
+          hostname
+          ml Stages/2024 Python/3.11.3
+          cd /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/
+          sbatch test.sh
