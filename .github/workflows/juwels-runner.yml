@@ -3,7 +3,7 @@ name: Test Juwels Runner
 on:
   push:
     branches:
-      - 'gh-worker'
+      - 'main'
 
 jobs:
   run-command:
