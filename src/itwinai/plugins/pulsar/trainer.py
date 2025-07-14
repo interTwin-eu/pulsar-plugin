@@ -7,12 +7,12 @@ import os
 from typing import Any, Dict, Literal, Optional, Tuple
 
 import torch.nn as nn
-from itwinai.loggers import Logger
-from itwinai.torch.config import TrainingConfiguration
-from itwinai.torch.trainer import TorchTrainer
 from torch import save
 from torch.utils.data import Dataset
 
+from itwinai.loggers import Logger
+from itwinai.torch.config import TrainingConfiguration
+from itwinai.torch.trainer import TorchTrainer
 
 class PulsarTrainer(TorchTrainer):
     """Trainer class for radio-astronomy use-case.
