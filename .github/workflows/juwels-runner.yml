@@ -50,3 +50,9 @@ jobs:
           else
             echo "SLURM job completed successfully with exit code 0"
           fi
+
+          echo "=== SLURM STDOUT ==="
+          cat "/p/project1/intertwin/krochak1/pulsar-plugin/actions-runner-logs/output.${JOBID}.out" || echo "No output file found."
+
+          echo "=== SLURM STDERR ==="
+          cat "/p/project1/intertwin/krochak1/pulsar-plugin/actions-runner-logs/error.${JOBID}.out" || echo "No error file found."
