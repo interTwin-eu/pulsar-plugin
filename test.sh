@@ -15,6 +15,8 @@
 # ml --force purge
 # ml Stages/2024  GCCcore/.12.3.0 Python/3.11.3
 
+set -e
+
 ml --force purge
 ml Stages/2024 GCC OpenMPI CUDA/12 cuDNN MPI-settings/CUDA
 ml Python CMake HDF5 PnetCDF libaio mpi4py

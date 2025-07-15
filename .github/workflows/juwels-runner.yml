@@ -24,6 +24,7 @@ jobs:
           set -e
 
           echo "Submitting job..."
+          cd /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/ || exit 
           JOBID=$(sbatch --parsable test.sh)
           echo "Submitted as $JOBID"
 
@@ -36,7 +37,7 @@ jobs:
 
           # Optional: wait for output file to appear if your system writes it after job end
           OUTFILE="output.${JOBID}.out"
-          for i in {1..10}; do
+          for _ in {1..10}; do
             if [[ -f $OUTFILE ]]; then break; fi
             echo "Waiting for output file $OUTFILE..."
             sleep 5
