@@ -11,8 +11,12 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=48
 #SBATCH --exclusive
+#SBATCH --get-user-env
 
 # set -e
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
 
 echo "SLURM WORKS"
 
