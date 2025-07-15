@@ -2,7 +2,7 @@
 
 ## general configuration of the job
 #SBATCH --job-name=itwinai-radio-astronomy
-#SBATCH --account=slfse
+###SBATCH --account=slfse
 #SBATCH --partition=devel
 #SBATCH --output=/p/project1/intertwin/krochak1/pulsar-plugin/output.%j.out
 #SBATCH --error=/p/project1/intertwin/krochak1/pulsar-plugin/error.%j.out
@@ -10,8 +10,6 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=48
-#SBATCH --exclusive
-#SBATCH --get-user-env
 
 # set -e
 if [ -f /etc/bashrc ]; then

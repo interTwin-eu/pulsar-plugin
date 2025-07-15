@@ -9,8 +9,8 @@ jobs:
   run-command:
     runs-on: [self-hosted, linux]  # adjust labels if you used custom ones
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
 
       # - name: Run your HPC command
       #   run: |
@@ -21,46 +21,7 @@ jobs:
       #     sbatch test.sh
       - name: Submit and monitor SLURM job
         run: |
-          ## set -e
-
-          ml --force purge
-          ml Stages/2024 GCC OpenMPI CUDA/12 cuDNN MPI-settings/CUDA
-          ml Python CMake HDF5 PnetCDF libaio mpi4py
-          ml X11/20230603 OpenGL/2023a
-
-
-          module list
-
-  
-          echo "Submitting job..."
-          cd /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/ || exit 
-          JOBID=$(sbatch --parsable test.sh)
-          echo "Submitted as $JOBID"
-
-          echo "Waiting for job to complete..."
-          while squeue -j "$JOBID" 2>/dev/null | grep -q "$JOBID"; do
-            sleep 10
-          done
-
-          echo "Job $JOBID appears to have finished."
-
-          # Optional: wait for output file to appear if your system writes it after job end
-          OUTFILE="output.${JOBID}.out"
-          for _ in {1..10}; do
-            if [[ -f $OUTFILE ]]; then break; fi
-            echo "Waiting for output file $OUTFILE..."
-            sleep 5
-          done
-
-          if [[ ! -f $OUTFILE ]]; then
-            echo "ERROR: Output file $OUTFILE not found."
-            exit 1
-          fi
-
-          echo "Output file found. Checking for success..."
-          if grep -q "FAILED" "$OUTFILE"; then
-            echo "Job output indicates failure."
-            exit 1
-          else
-            echo "Job appears successful."
-          fi
+          hostname
+          whoami 
+          cd /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/
+          sbatch test.sh
