@@ -23,5 +23,5 @@ jobs:
         run: |
           hostname
           whoami 
-          cd /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/
-          sbatch test.sh
+          pwd
+          sbatch /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/test.sh
