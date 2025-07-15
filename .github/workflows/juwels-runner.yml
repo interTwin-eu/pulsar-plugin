@@ -24,4 +24,13 @@ jobs:
           hostname
           whoami 
           pwd
+
+          echo "Runner user: $(whoami)"
+          echo "Runner home: $HOME"
+          echo "Runner path: $PATH"
+          env | sort
+
+          ls -la  /p/project1/intertwin/krochak1/pulsar-plugin/
+          touch  /p/project1/intertwin/krochak1/pulsar-plugin/test_file.txt
+
           sbatch /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/test.sh
