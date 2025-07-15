@@ -20,6 +20,7 @@ ml Stages/2024 GCC OpenMPI CUDA/12 cuDNN MPI-settings/CUDA
 ml Python CMake HDF5 PnetCDF libaio mpi4py
 ml X11/20230603 OpenGL/2023a
 
+# shellcheck source=/p/project1/intertwin/krochak1/pulsar-plugin/.venv-juwels-cluster/bin/activate
 source /p/project1/intertwin/krochak1/pulsar-plugin/.venv-juwels-cluster/bin/activate
 
 cd /p/project1/intertwin/krochak1/pulsar-plugin || exit
