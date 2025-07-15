@@ -22,6 +22,5 @@ ml X11/20230603 OpenGL/2023a
 
 source /p/project1/intertwin/krochak1/pulsar-plugin/.venv-juwels-cluster/bin/activate
 
-cd /p/project1/intertwin/krochak1/pulsar-plugin
-
+cd /p/project1/intertwin/krochak1/pulsar-plugin || exit
 pytest tests
