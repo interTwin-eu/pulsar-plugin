@@ -2,19 +2,14 @@
 
 ## general configuration of the job
 #SBATCH --job-name=itwinai-radio-astronomy
-###SBATCH --account=slfse
+#SBATCH --account=slfse
 #SBATCH --partition=devel
-#SBATCH --output=output.%j.out
-#SBATCH --error=error.%j.out
+#SBATCH --output=output.out
+#SBATCH --error=error.out
 #SBATCH --time=00:10:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=48
-
-# set -e
-if [ -f /etc/bashrc ]; then
-        . /etc/bashrc
-fi
 
 echo "SLURM WORKS"
 
