@@ -12,10 +12,45 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run your HPC command
+      # - name: Run your HPC command
+      #   run: |
+      #     echo "Running on HPC node"
+      #     hostname
+      #     ml Stages/2024 Python/3.11.3
+      #     cd /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/
+      #     sbatch test.sh
+      - name: Submit and monitor SLURM job
         run: |
-          echo "Running on HPC node"
-          hostname
-          ml Stages/2024 Python/3.11.3
-          cd /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/
-          sbatch test.sh
+          set -e
+
+          echo "Submitting job..."
+          JOBID=$(sbatch --parsable test.sh)
+          echo "Submitted as $JOBID"
+
+          echo "Waiting for job to complete..."
+          while squeue -j "$JOBID" 2>/dev/null | grep -q "$JOBID"; do
+            sleep 10
+          done
+
+          echo "Job $JOBID appears to have finished."
+
+          # Optional: wait for output file to appear if your system writes it after job end
+          OUTFILE="output.${JOBID}.out"
+          for i in {1..10}; do
+            if [[ -f $OUTFILE ]]; then break; fi
+            echo "Waiting for output file $OUTFILE..."
+            sleep 5
+          done
+
+          if [[ ! -f $OUTFILE ]]; then
+            echo "ERROR: Output file $OUTFILE not found."
+            exit 1
+          fi
+
+          echo "Output file found. Checking for success..."
+          if grep -q "FAILED" "$OUTFILE"; then
+            echo "Job output indicates failure."
+            exit 1
+          else
+            echo "Job appears successful."
+          fi
