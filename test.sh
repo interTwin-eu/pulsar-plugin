@@ -4,8 +4,8 @@
 #SBATCH --job-name=itwinai-radio-astronomy
 #SBATCH --account=slfse
 #SBATCH --partition=devel
-#SBATCH --output=output.out
-#SBATCH --error=error.out
+#SBATCH --output=output.%j.out
+#SBATCH --error=error.%j.out
 #SBATCH --time=00:10:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1

@@ -21,9 +21,4 @@ jobs:
       #     sbatch test.sh
       - name: Submit and monitor SLURM job
         run: |
-
-          echo "Runner user: $(whoami)"
-          echo "Runner home: $HOME"
-          echo "Runner path: $PATH"
-
-          sbatch /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/test.sh
+          sbatch /p/project1/intertwin/krochak1/pulsar-plugin/test.sh
