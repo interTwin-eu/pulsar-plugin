@@ -8,25 +8,22 @@ on:
 jobs:
   run-command:
     runs-on: [self-hosted, linux]  # adjust labels if you used custom ones
+    env:
+      GITHUB_WORKSPACE: /p/project1/intertwin/krochak1/pulsar-plugin/
+      SLURM_SCRIPT: /p/project1/intertwin/krochak1/pulsar-plugin/test.sh
+      SLURM_LOGS: /p/project1/intertwin/krochak1/pulsar-plugin/actions-runner-logs/
+      
     steps:
-      # - name: Checkout code
-      #   uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # - name: Run your HPC command
-      #   run: |
-      #     echo "Running on HPC node"
-      #     hostname
-      #     ml Stages/2024 Python/3.11.3
-      #     cd /p/home/jusers/krochak1/juwels/cslfse/pulsar-plugin/
-      #     sbatch test.sh
       - name: Submit and monitor SLURM job
         run: |
-          ###sbatch /p/project1/intertwin/krochak1/pulsar-plugin/test.sh
           
-          cd /p/project1/intertwin/krochak1/pulsar-plugin/ || exit 
+          cd $GITHUB_WORKSPACE || exit 
 
           echo "Submitting job..."
-          JOBID=$(sbatch --parsable test.sh)
+          JOBID=$(sbatch --parsable "$SLURM_SCRIPT")
           echo "Submitted as $JOBID"
 
           echo "Waiting for job to complete..."
@@ -51,8 +48,10 @@ jobs:
             echo "SLURM job completed successfully with exit code 0"
           fi
 
+      - name: Read SLURM logs 
+        run: |
           echo "=== SLURM STDOUT ==="
-          cat "/p/project1/intertwin/krochak1/pulsar-plugin/actions-runner-logs/output.${JOBID}.out" || echo "No output file found."
+          cat "${SLURM_LOGS}/output.${JOBID}.out" || echo "No output file found."
 
           echo "=== SLURM STDERR ==="
-          cat "/p/project1/intertwin/krochak1/pulsar-plugin/actions-runner-logs/error.${JOBID}.out" || echo "No error file found."
+          cat "${SLURM_LOGS}/error.${JOBID}.out" || echo "No error file found."
