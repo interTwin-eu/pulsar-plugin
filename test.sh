@@ -4,8 +4,8 @@
 #SBATCH --job-name=itwinai-radio-astronomy
 #SBATCH --account=slfse
 #SBATCH --partition=devel
-#SBATCH --output=/p/project1/intertwin/krochak1/pulsar-plugin/actions-runner-logs/output.%j.out
-#SBATCH --error=/p/project1/intertwin/krochak1/pulsar-plugin/actions-runner-logs/error.%j.out
+#SBATCH --output=/p/project1/intertwin/krochak1/pulsar-plugin/pytest-runner/actions-runner-logs/output.%j.out
+#SBATCH --error=/p/project1/intertwin/krochak1/pulsar-plugin/pytest-runner/actions-runner-logs/error.%j.out
 #SBATCH --time=00:10:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
