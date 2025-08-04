@@ -25,6 +25,7 @@ jobs:
           echo "Submitting job..."
           JOBID=$(sbatch --parsable "$SLURM_SCRIPT")
           echo "Submitted as $JOBID"
+          echo "JOBID=$JOBID" >> $GITHUB_ENV
 
           echo "Waiting for job to complete..."
           while squeue -j "$JOBID" 2>/dev/null | grep -q "$JOBID"; do
